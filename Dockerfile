@@ -1,6 +1,6 @@
 FROM php:8.3-apache
 
-# Instalar extensiones necesarias para Laravel
+# Install required packages for Laravel
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -11,17 +11,27 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     curl
 
-# Extensiones PHP
+# Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
-# Habilitar mod_rewrite de Apache (necesario para Laravel)
+# Enable Apache mod_rewrite (required for Laravel routing)
 RUN a2enmod rewrite
 
-# Configurar Apache para servir Laravel desde /var/www/html/public
+# Install Xdebug
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
+# Configure Apache to serve Laravel from /var/www/html/public
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Instalar Composer
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Carpeta de trabajo
+# Xdebug configuration
+RUN echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "xdebug.start_with_request=no" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "xdebug.mode=coverage" > /usr/local/etc/php/conf.d/xdebug.ini
+
+# Set working directory
 WORKDIR /var/www/html
+

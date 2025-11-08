@@ -213,10 +213,40 @@ OrderManagementAPI/
 
 # Testing
 
+To run test:
+
 ```bash
 docker exec -it order_management_app php artisan test
 ```
 
+To generate coverage(Text + HTML + Clover)
+
+```bash
+docker exec -it order_management_app vendor/bin/phpunit \
+  --coverage-html tests/coverage/html \
+  --coverage-text tests/coverage/coverage.txt \
+  --coverage-clover tests/coverage/clover.xml
+```
+
+Alternative Laravel test runner:
+
+```bash
+docker exec -it order_management_app php artisan test --coverage
+```
+
+After running the coverage commands, the reports are generated in:
+
+```bash
+tests/coverage/html/        → HTML coverage report (open in browser)
+tests/coverage/coverage.txt → Text summary
+tests/coverage/clover.xml   → CI/CD compatible report
+```
+
+To see the HTML report:
+Open:
+```bash
+tests/coverage/html/index.html
+```
 ---
 
 
