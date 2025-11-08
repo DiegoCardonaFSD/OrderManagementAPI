@@ -2,23 +2,21 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
-use App\Models\Client;
+use App\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 
-class UserFactory extends Factory
+class AdminFactory extends Factory
 {
-    protected $model = User::class;
+    protected $model = Admin::class;
 
     public function definition()
     {
         return [
-            'client_id' => Client::factory(),
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
+            // default password: secret
             'password' => Hash::make('secret'),
-            'email_verified_at' => now(),
         ];
     }
 }
