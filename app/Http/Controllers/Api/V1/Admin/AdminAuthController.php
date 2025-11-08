@@ -25,6 +25,7 @@ class AdminAuthController extends Controller
 
         return response()->json([
             'token' => $result['token'],
+            'message' => __('api.admin.login_success'),
             'admin' => [
                 'id' => $result['admin']->id,
                 'name' => $result['admin']->name,

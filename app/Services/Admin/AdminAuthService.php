@@ -28,7 +28,7 @@ class AdminAuthService
         if (! $admin || ! Hash::check($password, $admin->password)) {
             return [
                 'success' => false,
-                'message' => 'Invalid credentials',
+                'message' => Lang::get('api.auth.invalid_credentials'),
             ];
         }
 
