@@ -18,11 +18,11 @@ This documentation explains how to install, configure, and run the project using
   - [8. Generate Application Key](#8-generate-application-key)
   - [9. Database Migrations](#9-database-migrations)
   - [10. Fixing File Permissions (WSL2)](#10-fixing-file-permissions-wsl2)
-  - [11. Accessing the Application](#11-accessing-the-application)
 
 - [ Project Structure](#-project-structure)
 - [ Docker Commands](#-docker-commands)
 - [ Testing](#-testing)
+- [ Api Documentation](#-api-documentation)
 
 ---
 
@@ -250,3 +250,10 @@ tests/coverage/html/index.html
 ---
 
 
+# Api Documentation
+
+To generate/regenerate the api documentation run the command:
+
+```bash
+docker exec -it order_management_app php artisan l5-swagger:generate
+```
