@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AdminLoginRequest;
+use App\Http\Requests\Admin\AdminLoginRequest;
 use App\Services\Admin\AdminAuthService;
 
 class AdminAuthController extends Controller
