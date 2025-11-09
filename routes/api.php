@@ -12,6 +12,10 @@ Route::middleware(['api'])->group(function () {
 
         Route::post('/login', [AdminAuthController::class, 'login']);
 
+        Route::get('/login', function() {
+            return ['locale' => App::getLocale()];
+        });
+
         //routes with token and scope required
         Route::middleware(['auth:sanctum', 'scopes:admin.full_access'])
             ->group(function () {
