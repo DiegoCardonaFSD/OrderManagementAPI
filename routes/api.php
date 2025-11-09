@@ -8,8 +8,18 @@ Route::middleware(['api'])->group(function () {
 
     // ADMIN group
     Route::prefix('admin')->group(function () {
+
         Route::post('/login', [AdminAuthController::class, 'login']);
-    });
+
+        //routes with token and scope required
+        Route::middleware(['auth:sanctum', 'scopes:admin.full_access'])
+            ->group(function () {
+
+                Route::get('/me', function () {
+                    return auth()->user();
+                });
+            });
+    });    
 
 });
 
