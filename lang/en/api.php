@@ -32,6 +32,8 @@ return [
                 'email_email'    => 'The email must be a valid email address.',
                 'email_unique'   => 'The email has already been taken.',
             ],
+            'password_required' => 'The password is required.',
+            'password_min'      => 'The password must be at least 8 characters.',
         ]
     ],
 

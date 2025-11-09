@@ -28,7 +28,7 @@ class ClientService
         $client->users()->create([
             'name' => $client->name . ' Admin',
             'email' => $data['email'],
-            'password' => Hash::make($password),
+            'password' => Hash::make($data['password']),
             'role' => 'admin',
         ]);
 

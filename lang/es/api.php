@@ -29,6 +29,8 @@ return [
                 'email_required' => 'El campo correo electrónico es obligatorio.',
                 'email_email'    => 'El correo electrónico debe ser una dirección válida.',
             ],
+             'password_required' => 'La contraseña es obligatoria.',
+            'password_min'      => 'La contraseña debe tener al menos 8 caracteres.',
         ]
     ],
 

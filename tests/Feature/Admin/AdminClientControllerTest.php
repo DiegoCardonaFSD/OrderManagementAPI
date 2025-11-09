@@ -36,10 +36,10 @@ class AdminClientControllerTest extends TestCase
     public function test_store_creates_client()
     {
         $this->authenticateAdmin();
-        $data = ['name' => 'John Doe', 'email' => 'john@example.com'];
+        $data = ['name' => 'John Doe', 'email' => 'john@example.com', 'password' => 'secret987'];
 
         $response = $this->postJson('/api/admin/clients', $data);
-
+        
         $response->assertStatus(201)
                  ->assertJson([
                      'success' => true,
@@ -47,7 +47,10 @@ class AdminClientControllerTest extends TestCase
                      'data' => ['name'=>'John Doe', 'email'=>'john@example.com']
                  ]);
 
-        $this->assertDatabaseHas('clients', $data);
+        $this->assertDatabaseHas('clients', [
+            'name' => 'John Doe', 
+            'email' => 'john@example.com'
+        ]);
     }
 
     public function test_show_returns_client()

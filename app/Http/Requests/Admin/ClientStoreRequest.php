@@ -18,6 +18,7 @@ class ClientStoreRequest extends FormRequest
             'name'  => 'required|string|max:255',
             'email' => 'required|email|unique:clients,email',
             'status' => 'sometimes|in:active,inactive',
+            'password'=> 'required|string|min:8',
         ];
     }
 
@@ -29,6 +30,8 @@ class ClientStoreRequest extends FormRequest
             'email.email' => __('api.admin.client.email_valid'),
             'email.unique' => __('api.admin.client.email_unique'),
             'status.in' => __('api.admin.client.status_invalid'),
+            'password.required' => __('api.admin.client.password_required'),
+            'password.min'      => __('api.admin.client.password_min'),
         ];
     }
 }
