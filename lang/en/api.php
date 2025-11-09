@@ -22,6 +22,15 @@ return [
             'status_invalid' => 'Status must be active or inactive.',
             'listed' => 'Clients retrieved successfully.',
             'found' => 'Client retrieved successfully.',
+            'updated' => 'Client updated successfully.',
+            'validation' => [
+                'name_required'  => 'The name field is required.',
+                'name_string'    => 'The name must be a string.',
+                'name_max'       => 'The name may not be greater than 255 characters.',
+                'email_required' => 'The email field is required.',
+                'email_email'    => 'The email must be a valid email address.',
+                'email_unique'   => 'The email has already been taken.',
+            ],
         ]
     ],
 

@@ -20,6 +20,14 @@ return [
             'status_invalid' => 'El estado debe ser activo o inactivo.',
             'listed' => 'Cliente(s) recuperado(s) satisfactoriamente.',
             'found' => 'Cliente recuperado satisfactoriamente.',
+            'updated' => 'Cliente actualizado satisfactoriamente.',
+            'validation' => [
+                'name_required'  => 'El campo nombre es obligatorio.',
+                'name_string'    => 'El nombre debe ser una cadena de texto.',
+                'name_max'       => 'El nombre no puede tener más de 255 caracteres.',
+                'email_required' => 'El campo correo electrónico es obligatorio.',
+                'email_email'    => 'El correo electrónico debe ser una dirección válida.',
+            ],
         ]
     ],
 

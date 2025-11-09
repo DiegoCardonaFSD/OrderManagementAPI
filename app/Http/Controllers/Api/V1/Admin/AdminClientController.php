@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\ClientStoreRequest;
 use App\Services\Admin\ClientService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Http\Requests\Admin\ClientUpdateRequest;
 
 class AdminClientController extends Controller
 {
@@ -49,6 +50,17 @@ class AdminClientController extends Controller
         return response()->json([
             'success' => true,
             'message' => __('api.admin.client.found'),
+            'data' => $client
+        ]);
+    }
+
+    public function update(ClientUpdateRequest $request, int $id): JsonResponse
+    {
+        $client = $this->service->updateClient($id, $request->validated());
+
+        return response()->json([
+            'success' => true,
+            'message' => __('api.admin.client.updated'),
             'data' => $client
         ]);
     }

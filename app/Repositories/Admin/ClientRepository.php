@@ -38,4 +38,11 @@ class ClientRepository
         return $this->model->findOrFail($id); 
     }
 
+    public function update(int $id, array $data)
+    {
+        $client = $this->findById($id);
+        $client->update($data);
+        return $client;
+    }
+
 }

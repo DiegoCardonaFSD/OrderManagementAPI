@@ -29,4 +29,8 @@ class ClientService
         return $this->repository->findById($id);
     }
 
+    public function updateClient(int $id, array $data)
+    {
+        return $this->repository->update($id, $data);
+    }
 }
