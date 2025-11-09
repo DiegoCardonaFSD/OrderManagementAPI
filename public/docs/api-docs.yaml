@@ -1,56 +1,257 @@
-openapi: 3.0.0
-
+openapi: 3.0.3
 info:
-  title: "Order Management API"
-  version: "1.0.0"
+  title: Admin Clients API
+  version: 1.0.0
+  description: API for managing clients (tenants) in the admin panel.
+
+servers:
+  - url: http://localhost:8000/api
+
+components:
+  securitySchemes:
+    sanctumAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Client:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Demo Client"
+        email:
+          type: string
+          example: "demo@client.com"
+        created_at:
+          type: string
+          format: date-time
+          example: "2025-11-08T20:00:00.000000Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2025-11-08T20:00:00.000000Z"
+
+    ClientInput:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+          example: "Demo Client"
+        email:
+          type: string
+          example: "demo@client.com"
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "Validation failed."
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+
+security:
+  - sanctumAuth: []
 
 paths:
-  /api/admin/login:
+  /admin/clients:
     post:
+      summary: Create a new client
       tags:
-        - Admin Authentication
-      summary: Admin login
-      description: Authenticates an admin and returns an access token.
-      operationId: adminLogin
+        - Admin Clients
+      security:
+        - sanctumAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientInput'
+      responses:
+        '200':
+          description: Client created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Client created successfully."
+                  data:
+                    $ref: '#/components/schemas/Client'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    get:
+      summary: Get all clients
+      tags:
+        - Admin Clients
+      security:
+        - sanctumAuth: []
+      responses:
+        '200':
+          description: List of clients
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Clients retrieved successfully."
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Client'
+
+  /admin/clients/{id}:
+    get:
+      summary: Get a client by ID
+      tags:
+        - Admin Clients
+      security:
+        - sanctumAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Client retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Client retrieved successfully."
+                  data:
+                    $ref: '#/components/schemas/Client'
+        '404':
+          description: Client not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: Update a client
+      tags:
+        - Admin Clients
+      security:
+        - sanctumAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required:
-                - email
-                - password
               properties:
+                name:
+                  type: string
+                  example: "Updated Client Name"
                 email:
                   type: string
-                  example: admin@example.com
-                password:
-                  type: string
-                  example: secret
+                  example: "updated@example.com"
       responses:
-        "200":
-          description: Login successful
+        '200':
+          description: Client updated successfully
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  token:
-                    type: string
+                  success:
+                    type: boolean
+                    example: true
                   message:
                     type: string
-                  admin:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                        example: 1
-                      name:
-                        type: string
-                      email:
-                        type: string
-        "401":
-          description: Invalid credentials
-        "422":
+                    example: "Client updated successfully."
+                  data:
+                    $ref: '#/components/schemas/Client'
+        '422':
           description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Client not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Delete a client
+      tags:
+        - Admin Clients
+      security:
+        - sanctumAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Client deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Client deleted successfully."
+        '404':
+          description: Client not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
