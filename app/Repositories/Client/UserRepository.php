@@ -17,4 +17,17 @@ class UserRepository
     {
         return $this->model->create($data);
     }
+
+    public function findByEmail(string $email): ?User
+    {
+        return $this->model->where('email', $email)->first();
+    }
+
+    public function findByEmailAndClient(string $email, int $clientId): ?User
+    {
+        return $this->model
+            ->where('email', $email)
+            ->where('client_id', $clientId)
+            ->first();
+    }
 }

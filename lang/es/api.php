@@ -29,9 +29,27 @@ return [
                 'email_required' => 'El campo correo electrónico es obligatorio.',
                 'email_email'    => 'El correo electrónico debe ser una dirección válida.',
             ],
-             'password_required' => 'La contraseña es obligatoria.',
+            'password_required' => 'La contraseña es obligatoria.',
             'password_min'      => 'La contraseña debe tener al menos 8 caracteres.',
+            'user' => [
+                'email_required'      => 'El correo electrónico es obligatorio.',
+                'email_valid'         => 'El correo electrónico debe ser válido.',
+                'password_required'   => 'La contraseña es obligatoria.',
+                'password_min'        => 'La contraseña debe tener al menos 8 caracteres.',
+                'client_required'     => 'El ID del cliente es obligatorio.',
+                'client_exists'       => 'El cliente no existe.',
+                'invalid_credentials' => 'Credenciales inválidas.',
+            ],
         ]
     ],
+
+    'client' => [
+        'invalid_tenant' => 'ID de cliente no válido.',
+        'login_success' => 'Inicio de sesión exitoso.',
+        'invalid_credentials' => 'Credenciales inválidas.',
+        'tenant_required' => 'El ID del cliente (tenant) es obligatorio.',
+        'tenant_invalid'  => 'El ID del cliente (tenant) es inválido.',
+    ],
+
 
 ];

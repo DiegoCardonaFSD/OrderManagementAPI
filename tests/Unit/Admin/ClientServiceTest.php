@@ -28,6 +28,7 @@ class ClientServiceTest extends TestCase
         $data = [
             'name' => 'John Doe', 
             'email' => 'john@example.com',
+            'password' => 'secret987',
         ];
 
         $client = $this->service->createClient($data);

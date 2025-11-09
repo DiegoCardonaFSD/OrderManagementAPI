@@ -34,7 +34,24 @@ return [
             ],
             'password_required' => 'The password is required.',
             'password_min'      => 'The password must be at least 8 characters.',
+            'user' => [
+                'email_required'      => 'Email is required.',
+                'email_valid'         => 'Email must be a valid email address.',
+                'password_required'   => 'Password is required.',
+                'password_min'        => 'Password must be at least 8 characters.',
+                'client_required'     => 'Client ID is required.',
+                'client_exists'       => 'Client does not exist.',
+                'invalid_credentials' => 'Invalid credentials.',
+            ],
         ]
+    ],
+
+    'client' => [
+        'invalid_tenant' => 'Invalid tenant ID.',
+        'login_success' => 'Login successful.',
+        'invalid_credentials' => 'Invalid credentials.',
+        'tenant_required' => 'Tenant ID is required.',
+        'tenant_invalid'  => 'Invalid tenant ID.',
     ],
 
 ];
