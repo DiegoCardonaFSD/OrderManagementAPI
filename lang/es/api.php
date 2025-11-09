@@ -11,6 +11,14 @@ return [
 
     'admin' => [
         'login_success' => 'Autenticación de administrador exitosa.',
+        'client' => [
+            'created' => 'Cliente creado exitosamente.',
+            'name_required' => 'El nombre es obligatorio.',
+            'email_required' => 'El correo es obligatorio.',
+            'email_valid' => 'El correo debe ser válido.',
+            'email_unique' => 'El correo ya está en uso.',
+            'status_invalid' => 'El estado debe ser activo o inactivo.',
+        ]
     ],
 
 ];

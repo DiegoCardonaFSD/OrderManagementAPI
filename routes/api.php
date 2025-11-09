@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Admin\AdminAuthController;
+use App\Http\Controllers\Api\V1\Admin\AdminClientController;
 
 // API V1 (header version)
 Route::middleware(['api'])->group(function () {
@@ -18,6 +19,8 @@ Route::middleware(['api'])->group(function () {
                 Route::get('/me', function () {
                     return auth()->user();
                 });
+
+                Route::post('/clients', [AdminClientController::class, 'store']);
             });
     });    
 
