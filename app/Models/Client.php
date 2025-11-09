@@ -9,5 +9,13 @@ class Client extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'email', 'status'];
+    protected $fillable = ['name', 'email', 'status', 'client_id'];
+
+    /**
+     * Users that belong to this client.
+     */
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

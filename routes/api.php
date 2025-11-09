@@ -26,7 +26,12 @@ Route::middleware(['api'])->group(function () {
 
                 Route::apiResource('clients', AdminClientController::class)->except(['create', 'edit']);
             });
-    });    
+    }); 
+    
+    Route::middleware(['auth:sanctum', 'scope:client'])->group(function () {
+        Route::post('/orders', [OrderController::class, 'store']);
+    });
+
 
 });
 

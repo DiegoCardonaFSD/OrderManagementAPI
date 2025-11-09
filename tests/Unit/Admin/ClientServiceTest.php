@@ -3,6 +3,7 @@
 namespace Tests\Unit\Admin;
 
 use App\Models\Client;
+use App\Models\User;
 use App\Services\Admin\ClientService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -24,12 +25,21 @@ class ClientServiceTest extends TestCase
     #[Test]
     public function create_client_saves_to_database()
     {
-        $data = ['name' => 'John Doe', 'email' => 'john@example.com'];
+        $data = [
+            'name' => 'John Doe', 
+            'email' => 'john@example.com',
+        ];
 
         $client = $this->service->createClient($data);
 
         $this->assertDatabaseHas('clients', ['email' => 'john@example.com']);
         $this->assertEquals('John Doe', $client->name);
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'john@example.com',
+            'client_id' => $client->id,
+            'role' => 'admin'
+        ]);
     }
 
     #[Test]

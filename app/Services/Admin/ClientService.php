@@ -23,20 +23,19 @@ class ClientService
     {
         $client = $this->clientRepository->create($data);
 
-        // automatic tenant user creation
-        $password = Str::random(10); 
-        $this->userRepository->create([
-            'client_id' => $client->id,
+        // automatic tenant user creation using relationship
+        $password = Str::random(10);
+        $client->users()->create([
             'name' => $client->name . ' Admin',
             'email' => $data['email'],
             'password' => Hash::make($password),
-            'role' => 'admin', 
+            'role' => 'admin',
         ]);
 
         return $client;
     }
 
-    public function listClients(array $filters, int $perPage)
+    public function listClients(array $filters, int $perPage = 0)
     {
         return $this->clientRepository->getAll($filters, $perPage);
     }
