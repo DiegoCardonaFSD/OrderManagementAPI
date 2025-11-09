@@ -20,11 +20,7 @@ Route::middleware(['api'])->group(function () {
                     return auth()->user();
                 });
 
-                Route::post('/clients', [AdminClientController::class, 'store']);
-                Route::get('/clients', [AdminClientController::class, 'index']);
-                Route::get('/clients/{id}', [AdminClientController::class, 'show']);
-                Route::put('/clients/{id}', [AdminClientController::class, 'update']);
-                Route::delete('/clients/{id}', [AdminClientController::class, 'destroy']);
+                Route::apiResource('clients', AdminClientController::class)->except(['create', 'edit']);
             });
     });    
 
