@@ -24,6 +24,7 @@ Route::middleware(['api'])->group(function () {
                 Route::get('/clients', [AdminClientController::class, 'index']);
                 Route::get('/clients/{id}', [AdminClientController::class, 'show']);
                 Route::put('/clients/{id}', [AdminClientController::class, 'update']);
+                Route::delete('/clients/{id}', [AdminClientController::class, 'destroy']);
             });
     });    
 

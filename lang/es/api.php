@@ -21,6 +21,7 @@ return [
             'listed' => 'Cliente(s) recuperado(s) satisfactoriamente.',
             'found' => 'Cliente recuperado satisfactoriamente.',
             'updated' => 'Cliente actualizado satisfactoriamente.',
+            'deleted' => 'Cliente eliminado correctamente.',
             'validation' => [
                 'name_required'  => 'El campo nombre es obligatorio.',
                 'name_string'    => 'El nombre debe ser una cadena de texto.',

@@ -45,4 +45,10 @@ class ClientRepository
         return $client;
     }
 
+    public function delete(int $id): bool
+    {
+        $client = $this->findById($id);
+        return $client->delete(); 
+    }
+
 }

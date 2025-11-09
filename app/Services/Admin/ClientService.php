@@ -33,4 +33,9 @@ class ClientService
     {
         return $this->repository->update($id, $data);
     }
+
+    public function deleteClient(int $id): bool
+    {
+        return $this->repository->delete($id);
+    }
 }

@@ -23,6 +23,7 @@ return [
             'listed' => 'Clients retrieved successfully.',
             'found' => 'Client retrieved successfully.',
             'updated' => 'Client updated successfully.',
+            'deleted' => 'Client deleted successfully.',
             'validation' => [
                 'name_required'  => 'The name field is required.',
                 'name_string'    => 'The name must be a string.',

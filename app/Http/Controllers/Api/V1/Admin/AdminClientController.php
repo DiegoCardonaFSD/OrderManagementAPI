@@ -65,4 +65,14 @@ class AdminClientController extends Controller
         ]);
     }
 
+    public function destroy(int $id): JsonResponse
+    {
+        $this->service->deleteClient($id);
+
+        return response()->json([
+            'success' => true,
+            'message' => __('api.admin.client.deleted')
+        ]);
+    }
+
 }
