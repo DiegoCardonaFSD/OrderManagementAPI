@@ -1,0 +1,56 @@
+openapi: 3.0.0
+
+info:
+  title: "Order Management API"
+  version: "1.0.0"
+
+paths:
+  /api/admin/login:
+    post:
+      tags:
+        - Admin Authentication
+      summary: Admin login
+      description: Authenticates an admin and returns an access token.
+      operationId: adminLogin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  example: admin@example.com
+                password:
+                  type: string
+                  example: secret
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  message:
+                    type: string
+                  admin:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                      email:
+                        type: string
+        "401":
+          description: Invalid credentials
+        "422":
+          description: Validation error

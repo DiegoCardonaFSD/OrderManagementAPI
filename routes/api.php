@@ -24,11 +24,3 @@ Route::middleware(['api'])->group(function () {
 });
 
 
-
-
-
-
-
-
-//TODO: to delete
-Route::get('/health', App\Http\Controllers\SwaggerTestController::class);
