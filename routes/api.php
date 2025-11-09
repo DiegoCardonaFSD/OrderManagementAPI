@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\Admin\AdminAuthController;
 use App\Http\Controllers\Api\V1\Admin\AdminClientController;
 use App\Http\Controllers\Api\V1\Client\ClientAuthController;
 use App\Http\Middleware\ValidateTenant;
+use App\Http\Controllers\Api\V1\Client\OrderController;
 
 // API V1 (header version)
 Route::middleware(['api'])->group(function () {
@@ -34,10 +35,15 @@ Route::middleware(['api'])->group(function () {
     //CLIENT group
     Route::post('login', [ClientAuthController::class, 'login']);
 
-    Route::middleware(['auth:sanctum', 'scope:client', ValidateTenant::class])->group(function () {
-        //Route::post('/orders', [OrderController::class, 'store']);
+    Route::middleware(['auth:sanctum', 'scopes:client.full_access', ValidateTenant::class])->group(function () {
+        Route::post('/orders', [OrderController::class, 'store']);
     });
 
+    //testing
+    Route::middleware([CheckScopes::class . ':client.full_access'])
+    ->any('/test-scope', function () {
+        return response()->json(['ok' => true], 200);
+    });
 
 });
 

@@ -54,4 +54,14 @@ return [
         'tenant_invalid'  => 'Invalid tenant ID.',
     ],
 
+    'orders' => [
+        'created' => 'Order created successfully.',
+        'items_required' => 'The items field is required.',
+        'items_array' => 'Items must be an array.',
+        'items_min' => 'At least one item is required.',
+        'item_name_required' => 'Each item must have a name.',
+        'item_quantity_min' => 'Item quantity must be at least 1.',
+        'item_price_min' => 'Item price must be at least 0.',
+    ],
+
 ];

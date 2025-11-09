@@ -2,44 +2,48 @@
 
 namespace App\Services\Client;
 
-use App\Models\Order;
-use App\Models\OrderItem;
 use App\Repositories\Client\OrderRepository;
-use App\Jobs\GenerateInvoiceJob;
+use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
-    protected OrderRepository $repository;
+    protected OrderRepository $orders;
 
-    public function __construct(OrderRepository $repository)
+    public function __construct(OrderRepository $orders)
     {
-        $this->repository = $repository;
+        $this->orders = $orders;
     }
 
-    public function createOrder($user, array $items): Order
+    public function storeOrder(int $clientId, int $userId, array $items): Order
     {
-        return DB::transaction(function () use ($user, $items) {
-            $order = $this->repository->createOrder([
-                'client_id' => $user->client_id,
-                'user_id' => $user->id,
-                'status' => 'created',
-                'total' => collect($items)->sum(fn($i) => $i['quantity'] * $i['price']),
+        return DB::transaction(function () use ($clientId, $userId, $items) {
+
+            $order = $this->orders->createOrder([
+                'client_id' => $clientId,
+                'user_id'   => $userId,
+                'status'    => 'created',
+                'total'     => 0,
             ]);
 
+            $total = 0;
+
             foreach ($items as $item) {
-                $order->items()->create([
-                    'name' => $item['name'],
+                $subtotal = $item['price'] * $item['quantity'];
+                $total += $subtotal;
+
+                $this->orders->createItem([
+                    'order_id' => $order->id,
+                    'name'     => $item['name'],
                     'quantity' => $item['quantity'],
-                    'price' => $item['price'],
-                    'subtotal' => $item['quantity'] * $item['price'],
+                    'price'    => $item['price'],
+                    'subtotal' => $subtotal,
                 ]);
             }
 
-            
-            //GenerateInvoiceJob::dispatch($order);
+            $order->update(['total' => $total]);
 
-            return $order;
+            return $order->fresh(['items']);
         });
     }
 }

@@ -51,5 +51,16 @@ return [
         'tenant_invalid'  => 'El ID del cliente (tenant) es inválido.',
     ],
 
+    'orders' => [
+        'created' => 'Orden creada correctamente.',
+        'items_required' => 'El campo items es obligatorio.',
+        'items_array' => 'Items debe ser un array.',
+        'items_min' => 'Se requiere al menos un item.',
+        'item_name_required' => 'Cada item debe tener un nombre.',
+        'item_quantity_min' => 'La cantidad mínima es 1.',
+        'item_price_min' => 'El precio mínimo es 0.',
+    ],
+
+
 
 ];

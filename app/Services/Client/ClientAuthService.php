@@ -25,7 +25,7 @@ class ClientAuthService
             ]);
         }
 
-        $token = $user->createToken('user-token', ['user.full_access']);
+        $token = $user->createToken('client-token', ['client.full_access']);
 
         return [
             'success' => true,

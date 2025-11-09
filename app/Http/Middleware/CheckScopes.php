@@ -20,7 +20,7 @@ class CheckScopes
 
         if (! $user) {
             return response()->json([
-                'message' => 'Unauthorized'
+                'message' => __('api.auth.unauthorized')
             ], 401);
         }
 
