@@ -17,4 +17,25 @@ class ClientRepository
     {
         return $this->model->create($data);
     }
+
+    public function getAll(array $filters = [], int $perPage = 10)
+    {
+        $query = $this->model->query();
+
+        if (!empty($filters['name'])) {
+            $query->where('name', 'like', '%' . $filters['name'] . '%');
+        }
+
+        if (!empty($filters['email'])) {
+            $query->where('email', $filters['email']);
+        }
+
+        return $query->orderBy('id', 'desc')->paginate($perPage);
+    }
+
+    public function findById(int $id)
+    {
+        return $this->model->findOrFail($id); 
+    }
+
 }

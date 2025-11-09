@@ -18,4 +18,15 @@ class ClientService
     {
         return $this->repository->create($data);
     }
+
+    public function listClients(array $filters = [], int $perPage = 10)
+    {
+        return $this->repository->getAll($filters, $perPage);
+    }
+
+    public function getClientById(int $id)
+    {
+        return $this->repository->findById($id);
+    }
+
 }

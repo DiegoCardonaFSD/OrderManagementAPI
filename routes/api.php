@@ -21,6 +21,8 @@ Route::middleware(['api'])->group(function () {
                 });
 
                 Route::post('/clients', [AdminClientController::class, 'store']);
+                Route::get('/clients', [AdminClientController::class, 'index']);
+                Route::get('/clients/{id}', [AdminClientController::class, 'show']);
             });
     });    
 

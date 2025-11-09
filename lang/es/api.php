@@ -18,6 +18,8 @@ return [
             'email_valid' => 'El correo debe ser válido.',
             'email_unique' => 'El correo ya está en uso.',
             'status_invalid' => 'El estado debe ser activo o inactivo.',
+            'listed' => 'Cliente(s) recuperado(s) satisfactoriamente.',
+            'found' => 'Cliente recuperado satisfactoriamente.',
         ]
     ],
 

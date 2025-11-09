@@ -20,6 +20,8 @@ return [
             'email_valid' => 'Email must be valid.',
             'email_unique' => 'Email is already taken.',
             'status_invalid' => 'Status must be active or inactive.',
+            'listed' => 'Clients retrieved successfully.',
+            'found' => 'Client retrieved successfully.',
         ]
     ],
 
