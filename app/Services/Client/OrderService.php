@@ -52,4 +52,10 @@ class OrderService
         return $this->orders->findOrderById($orderId, $clientId);
     }
 
+    public function getOrdersForClient(int $clientId)
+    {
+        return $this->orders->getOrdersByClient($clientId);
+    }
+
+
 }

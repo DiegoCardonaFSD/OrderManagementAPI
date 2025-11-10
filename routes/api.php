@@ -38,6 +38,7 @@ Route::middleware(['api'])->group(function () {
     Route::middleware(['auth:sanctum', 'scopes:client.full_access', ValidateTenant::class])->group(function () {
         Route::post('/orders', [OrderController::class, 'store']);
         Route::get('/orders/{id}', [OrderController::class, 'show']);
+        Route::get('/clients/{id}/orders', [OrderController::class, 'clientOrders']);
     });
 
     //testing

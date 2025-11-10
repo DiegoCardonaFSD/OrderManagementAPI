@@ -61,6 +61,7 @@ return [
         'item_price_min' => 'El precio mínimo es 0.',
         'found'        => 'Orden recuperada correctamente.',
         'not_found'    => 'Orden no encontrada.',
+        'listed' => 'Órdenes listadas correctamente.',
     ],
 
 

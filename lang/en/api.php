@@ -64,7 +64,7 @@ return [
         'item_price_min' => 'Item price must be at least 0.',
         'found'        => 'Order retrieved successfully.',
         'not_found'    => 'Order not found.',
-        
+        'listed' => 'Orders listed successfully.',
     ],
 
 ];

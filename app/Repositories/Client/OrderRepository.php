@@ -24,4 +24,13 @@ class OrderRepository
             ->with('items')
             ->first();
     }
+
+    public function getOrdersByClient(int $clientId)
+    {
+        return Order::where('client_id', $clientId)
+            ->with('items')
+            ->orderByDesc('id')
+            ->get();
+    }
+
 }

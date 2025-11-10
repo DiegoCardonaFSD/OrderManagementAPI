@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\StoreOrderRequest;
 use App\Services\Client\OrderService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -58,4 +59,25 @@ class OrderController extends Controller
             'data' => $order,
         ]);
     }
+
+    public function clientOrders(int $id, Request $request): JsonResponse
+    {
+        $tenantId = (int) $request->header('X-Tenant-ID');
+
+        if ($id !== $tenantId) {
+            return response()->json([
+                'success' => false,
+                'message' => __('api.client.invalid_tenant')
+            ], 403);
+        }
+
+        $orders = $this->service->getOrdersForClient($id);
+
+        return response()->json([
+            'success' => true,
+            'message' => __('api.orders.listed'),
+            'data'    => $orders,
+        ]);
+    }
+
 }

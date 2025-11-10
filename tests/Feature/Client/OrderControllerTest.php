@@ -173,4 +173,70 @@ class OrderControllerTest extends TestCase
 
         $response->assertStatus(404);
     }
+
+    #[Test]
+    public function client_user_can_list_its_own_orders()
+    {
+        $client = Client::factory()->create();
+        $user = User::factory()->create(['client_id' => $client->id]);
+
+        // Create orders
+        $order = Order::factory()->create([
+            'client_id' => $client->id,
+            'user_id'   => $user->id,
+        ]);
+
+        OrderItem::factory()->count(2)->create([
+            'order_id' => $order->id
+        ]);
+
+        // Login: create token
+        $token = $user->createToken('user-token', ['client.full_access'])->plainTextToken;
+
+        $response = $this->json('GET', "/api/clients/{$client->id}/orders", [], [
+            'Authorization' => "Bearer $token",
+            'X-Tenant-ID'   => $client->id,
+            'X-API-Version' => 1,
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'success',
+                'message',
+                'data' => [
+                    [
+                        'id',
+                        'client_id',
+                        'user_id',
+                        'status',
+                        'total',
+                        'items' => [
+                            ['id', 'order_id', 'name', 'quantity', 'price', 'subtotal']
+                        ]
+                    ]
+                ]
+            ]);
+    }
+
+    #[Test]
+    public function cannot_list_orders_of_other_tenant()
+    {
+        $clientA = Client::factory()->create();
+        $clientB = Client::factory()->create();
+
+        $user = User::factory()->create(['client_id' => $clientA->id]);
+
+        $token = $user->createToken('user-token', ['client.full_access'])->plainTextToken;
+
+        $response = $this->json('GET', "/api/clients/{$clientB->id}/orders", [], [
+            'Authorization' => "Bearer $token",
+            'X-Tenant-ID'   => $clientA->id,
+        ]);
+
+        $response->assertStatus(403)
+            ->assertJson([
+                'success' => false,
+                'message' => __('api.client.invalid_tenant')
+            ]);
+    }
 }
