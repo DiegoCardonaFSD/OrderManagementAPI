@@ -34,4 +34,28 @@ class OrderController extends Controller
             'data'    => $order,
         ], 201);
     }
+
+    public function show(int $id): JsonResponse
+    {
+        $tenantId = (int) request()->header('X-Tenant-ID');
+        $user = request()->user();
+
+        $order = $this->service->getOrder(
+            orderId: $id,
+            clientId: $tenantId
+        );
+
+        if (!$order || $order->user_id !== $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => __('api.orders.not_found'),
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => __('api.orders.found'),
+            'data' => $order,
+        ]);
+    }
 }

@@ -46,4 +46,10 @@ class OrderService
             return $order->fresh(['items']);
         });
     }
+
+    public function getOrder(int $orderId, int $clientId): ?Order
+    {
+        return $this->orders->findOrderById($orderId, $clientId);
+    }
+
 }

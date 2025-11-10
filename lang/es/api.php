@@ -59,6 +59,8 @@ return [
         'item_name_required' => 'Cada item debe tener un nombre.',
         'item_quantity_min' => 'La cantidad mínima es 1.',
         'item_price_min' => 'El precio mínimo es 0.',
+        'found'        => 'Orden recuperada correctamente.',
+        'not_found'    => 'Orden no encontrada.',
     ],
 
 

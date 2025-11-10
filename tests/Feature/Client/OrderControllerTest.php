@@ -4,6 +4,8 @@ namespace Tests\Feature\Client;
 
 use App\Models\Client;
 use App\Models\User;
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
@@ -117,5 +119,58 @@ class OrderControllerTest extends TestCase
         ]);
 
         $response->assertStatus(403);
+    }
+
+    #[Test]
+    public function it_returns_order_for_authenticated_user()
+    {
+        $client = Client::factory()->create();
+        $user = User::factory()->create(['client_id' => $client->id]);
+
+        $order = Order::factory()->create([
+            'client_id' => $client->id,
+            'user_id' => $user->id,
+        ]);
+
+        OrderItem::factory()->count(2)->create(['order_id' => $order->id]);
+
+        $token = $user->createToken('user-token', ['client.full_access'])->plainTextToken;
+
+        $response = $this->json('GET', "/api/orders/{$order->id}", [], [
+            'Authorization' => "Bearer $token",
+            'X-Tenant-ID'   => $client->id,
+        ]);
+
+        $response->assertStatus(200)
+                 ->assertJsonStructure([
+                     'success',
+                     'data' => [
+                         'id',
+                         'items' => [
+                             ['id', 'name', 'quantity', 'price', 'subtotal']
+                         ]
+                     ]
+                 ]);
+    }
+
+    #[Test]
+    public function it_returns_404_if_order_does_not_belong_to_user()
+    {
+        $client = Client::factory()->create();
+        $user = User::factory()->create(['client_id' => $client->id]);
+
+        $order = Order::factory()->create([
+            'client_id' => $client->id,
+            'user_id' => User::factory()->create()->id,
+        ]);
+
+        $token = $user->createToken('user-token', ['client.full_access'])->plainTextToken;
+
+        $response = $this->json('GET', "/api/orders/{$order->id}", [], [
+            'Authorization' => "Bearer $token",
+            'X-Tenant-ID'   => $client->id,
+        ]);
+
+        $response->assertStatus(404);
     }
 }

@@ -16,4 +16,12 @@ class OrderRepository
     {
         return OrderItem::create($data);
     }
+
+    public function findOrderById(int $orderId, int $clientId)
+    {
+        return Order::where('id', $orderId)
+            ->where('client_id', $clientId)
+            ->with('items')
+            ->first();
+    }
 }

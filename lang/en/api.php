@@ -62,6 +62,9 @@ return [
         'item_name_required' => 'Each item must have a name.',
         'item_quantity_min' => 'Item quantity must be at least 1.',
         'item_price_min' => 'Item price must be at least 0.',
+        'found'        => 'Order retrieved successfully.',
+        'not_found'    => 'Order not found.',
+        
     ],
 
 ];
