@@ -2,19 +2,24 @@
 
 namespace App\Services\Email;
 
-use App\Mail\InvoiceMail;
-use App\Models\Invoice;
 use App\Models\Order;
-use Illuminate\Support\Facades\Mail;
+use App\Models\Invoice;
+use App\Mail\InvoiceMail;
+use App\Repositories\Email\EmailSenderRepository;
 
 class EmailService
 {
+    protected EmailSenderRepository $mailer;
+
+    public function __construct(EmailSenderRepository $mailer)
+    {
+        $this->mailer = $mailer;
+    }
+
     public function sendInvoiceEmail(Order $order, Invoice $invoice): void
     {
-        $emailTo = $order->customer_email ?: 'no-reply@example.com';
+        $to = $order->customer_email ?: 'no-reply@example.com';
 
-        Mail::to($emailTo)->send(
-            new InvoiceMail($order, $invoice)
-        );
+        $this->mailer->send($to, new InvoiceMail($order, $invoice));
     }
 }
