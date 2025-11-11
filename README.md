@@ -29,8 +29,8 @@ This documentation explains how to install, configure, and run the project using
 
 # Installation
 
-This project uses **Docker + Apache + PHP 8.3 + MySQL + Redis** as its development environment.  
-All source code lives inside your local machine (WSL2 recommended on Windows), while Docker provides the runtime.
+This project uses **Docker + Apache + PHP 8.3 + MySQL + Redis + mailpit** as its development environment.  
+All source code lives inside your local machine (WSL2 recommended on Windows), while Docker provides the runtime over an Ubuntu OS.
 
 ---
 
@@ -38,12 +38,16 @@ All source code lives inside your local machine (WSL2 recommended on Windows), w
 
 Make sure the following tools are installed:
 
+For Windows users:
 - Docker Desktop (with WSL2 backend enabled)
 - WSL2 + Ubuntu (Windows users)
 - Git
+
+Inside Ubuntu:
 - Visual Studio Code (recommended)
+
+Inside php container:
 - Composer (optional, Docker can run it)
-- Node.js + NPM (optional for frontend assets)
 
 ---
 
@@ -69,7 +73,7 @@ If you're using WSL2, place the project under:
 Ensure the project root contains:
 
 - `Dockerfile` → Apache + PHP 8.3 setup
-- `docker-compose.yml` → App + MySQL + Redis stack
+- `docker-compose.yml` → App + MySQL + Redis + mailpit  stack
 
 These files define your full development environment.
 
@@ -84,7 +88,7 @@ docker compose up -d --build
 This will:
 
 - Build the PHP 8.3 + Apache container  
-- Start MySQL and Redis  
+- Start MySQL, Redis and Mailpit 
 - Mount your project into `/var/www/html`  
 
 ---
@@ -130,6 +134,15 @@ QUEUE_CONNECTION=redis
 REDIS_CLIENT=phpredis
 REDIS_HOST=redis
 REDIS_PORT=6379
+
+MAIL_MAILER=smtp
+MAIL_HOST=mailpit
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS=no-reply@orderapp.test
+MAIL_FROM_NAME="Order Management System"
 ```
 
 ---
@@ -154,13 +167,13 @@ docker exec -it order_management_app php artisan migrate
 
 If VS Code cannot save files:
 
-Run in WSL2:
+Run in Ubuntu:
 
 ```bash
 sudo chown -R $USER:$USER .
 ```
 
-Then inside Docker:
+Then inside Ubuntu:
 
 ```bash
 docker exec -it order_management_app chown -R www-data:www-data /var/www/html/storage
@@ -188,11 +201,14 @@ OrderManagementAPI/
 │── app/
 │── bootstrap/
 │── config/
-│── database/
+│── database//
+│── documentation
+│── lang/
 │── public/
 │── resources/
 │── routes/
 │── storage/
+│── test/
 │── vendor/
 │── Dockerfile
 │── docker-compose.yml
@@ -275,7 +291,7 @@ Redis::connection()->ping();
 >>>> = true
 ```
 
-To listen the redis queue
+To listen the Redis queue
 ```bash
 docker exec -it order_management_app php artisan queue:listen redis
 ```
