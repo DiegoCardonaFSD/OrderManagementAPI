@@ -19,10 +19,11 @@ This documentation explains how to install, configure, and run the project using
   - [9. Database Migrations](#9-database-migrations)
   - [10. Fixing File Permissions (WSL2)](#10-fixing-file-permissions-wsl2)
 
-- [ Project Structure](#-project-structure)
-- [ Docker Commands](#-docker-commands)
-- [ Testing](#-testing)
-- [ Api Documentation](#-api-documentation)
+- [ Project Structure](#project-structure)
+- [ Docker Commands](#docker-commands)
+- [ Testing](#testing)
+- [ Redis usage and configuration](#redis-usage-and-configuration)
+- [ MailHog Usage and Configuration](#mailhog-usage-and-configuration)
 
 ---
 
@@ -125,6 +126,8 @@ DB_DATABASE=order_management
 DB_USERNAME=orderuser
 DB_PASSWORD=orderpass
 
+QUEUE_CONNECTION=redis
+REDIS_CLIENT=phpredis
 REDIS_HOST=redis
 REDIS_PORT=6379
 ```
@@ -250,10 +253,50 @@ tests/coverage/html/index.html
 ---
 
 
-# Api Documentation
+# Redis usage and configuration
 
-To generate/regenerate the api documentation run the command:
+To check connection from Laravel Tinker:
 
+Server connection:
 ```bash
-docker exec -it order_management_app php artisan l5-swagger:generate
+docker exec -it order_management_app bash
+```
+
+To check Redis php installation:
+```bash
+php -m | grep redis
+>>>>redis
+```
+To connect to tinker and ping redis:
+```bash
+php artisan tinker
+use Illuminate\Support\Facades\Redis;
+Redis::connection()->ping();
+>>>> = true
+```
+
+To listen the redis queue
+```bash
+docker exec -it order_management_app php artisan queue:listen redis
+```
+
+# Mailpit Usage and Configuration
+
+The installation and configuration of Mailpit is done through the docker-compose.yml file.
+
+To be able to use it, you must apply the following configuration in the .env file:
+```bash
+MAIL_MAILER=smtp
+MAIL_HOST=mailpit
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS=no-reply@orderapp.test
+MAIL_FROM_NAME="Order Management System"
+```
+
+To verify whether the invoice email is being received, you need to access the following URL:
+```bash
+http://localhost:8025
 ```

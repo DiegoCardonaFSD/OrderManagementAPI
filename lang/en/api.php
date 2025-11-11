@@ -65,6 +65,8 @@ return [
         'found'        => 'Order retrieved successfully.',
         'not_found'    => 'Order not found.',
         'listed' => 'Orders listed successfully.',
+        'customer_name_required'   => 'The customer name is required.',
+        'customer_email_invalid'   => 'The customer email is not valid.',
     ],
 
 ];

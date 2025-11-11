@@ -15,7 +15,6 @@ class OrderController extends Controller
     public function __construct(OrderService $service)
     {
         $this->service = $service;
-        //middleware de sanctum?
     }
 
     public function store(StoreOrderRequest $request): JsonResponse
@@ -23,10 +22,22 @@ class OrderController extends Controller
         $user = $request->user();
         $tenantId = (int) $request->header('X-Tenant-ID');
 
+        $customerData = $request->only([
+            'customer_name',
+            'customer_email',
+            'customer_phone',
+            'customer_address',
+            'customer_city',
+            'customer_country',
+            'customer_tax_id',
+            'notes',
+        ]);
+
         $order = $this->service->storeOrder(
             clientId: $tenantId,
             userId: $user->id,
-            items: $request->items
+            items: $request->items,
+            customerData: $customerData
         );
 
         return response()->json([

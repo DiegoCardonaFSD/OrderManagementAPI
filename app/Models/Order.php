@@ -14,7 +14,16 @@ class Order extends Model
         'user_id',
         'status',
         'total',
+        'customer_name',
+        'customer_email',
+        'customer_phone',
+        'customer_address',
+        'customer_city',
+        'customer_country',
+        'customer_tax_id',
+        'notes',
     ];
+
 
     public function client()
     {
@@ -31,3 +40,4 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 }
+

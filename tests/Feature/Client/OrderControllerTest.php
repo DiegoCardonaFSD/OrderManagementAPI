@@ -27,18 +27,32 @@ class OrderControllerTest extends TestCase
         return [$user, $token];
     }
 
+    private function customerPayload(): array
+    {
+        return [
+            'customer_name'    => 'John Doe',
+            'customer_email'   => 'john@example.com',
+            'customer_phone'   => '+1 555 1234',
+            'customer_address' => '123 Street',
+            'customer_city'    => 'New York',
+            'customer_country' => 'USA',
+            'customer_tax_id'  => '123456789',
+            'notes'            => 'Test note',
+        ];
+    }
+
     #[Test]
     public function it_creates_an_order_successfully()
     {
         $client = Client::factory()->create();
         [$user, $token] = $this->createAuthenticatedTenantUser($client);
 
-        $payload = [
+        $payload = array_merge($this->customerPayload(), [
             "items" => [
                 ["name" => "Item A", "quantity" => 2, "price" => 10],
                 ["name" => "Item B", "quantity" => 1, "price" => 5]
             ]
-        ];
+        ]);
 
         $response = $this->postJson('/api/orders', $payload, [
             'Authorization' => "Bearer $token",
@@ -53,9 +67,10 @@ class OrderControllerTest extends TestCase
             ]);
 
         $this->assertDatabaseHas('orders', [
-            'client_id' => $client->id,
-            'user_id'   => $user->id,
-            'total'     => 25
+            'client_id'     => $client->id,
+            'user_id'       => $user->id,
+            'total'         => 25,
+            'customer_name' => 'John Doe',
         ]);
     }
 
@@ -65,13 +80,13 @@ class OrderControllerTest extends TestCase
         $client = Client::factory()->create();
         [$user, $token] = $this->createAuthenticatedTenantUser($client);
 
-        $response = $this->postJson('/api/orders', [], [
+        $response = $this->postJson('/api/orders', $this->customerPayload(), [
             'Authorization' => "Bearer $token",
             'X-Tenant-ID'   => $client->id
         ]);
 
         $response->assertStatus(422)
-                 ->assertJsonValidationErrors('items');
+            ->assertJsonValidationErrors('items');
     }
 
     #[Test]
@@ -80,18 +95,19 @@ class OrderControllerTest extends TestCase
         $client = Client::factory()->create();
         [$user, $token] = $this->createAuthenticatedTenantUser($client);
 
-        $payload = [
+        $payload = array_merge($this->customerPayload(), [
             "items" => [
                 ["name" => "", "quantity" => 0, "price" => -1]
             ]
-        ];
+        ]);
 
         $response = $this->postJson('/api/orders', $payload, [
             'Authorization' => "Bearer $token",
             'X-Tenant-ID'   => $client->id
         ]);
 
-        $response->assertStatus(422)
+        $response
+            ->assertStatus(422)
             ->assertJsonValidationErrors([
                 'items.0.name',
                 'items.0.quantity',
@@ -107,11 +123,11 @@ class OrderControllerTest extends TestCase
 
         [, $token] = $this->createAuthenticatedTenantUser($client1);
 
-        $payload = [
+        $payload = array_merge($this->customerPayload(), [
             "items" => [
                 ["name" => "Item A", "quantity" => 1, "price" => 10]
             ]
-        ];
+        ]);
 
         $response = $this->postJson('/api/orders', $payload, [
             'Authorization' => "Bearer $token",
@@ -142,15 +158,15 @@ class OrderControllerTest extends TestCase
         ]);
 
         $response->assertStatus(200)
-                 ->assertJsonStructure([
-                     'success',
-                     'data' => [
-                         'id',
-                         'items' => [
-                             ['id', 'name', 'quantity', 'price', 'subtotal']
-                         ]
-                     ]
-                 ]);
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'id',
+                    'items' => [
+                        ['id', 'name', 'quantity', 'price', 'subtotal']
+                    ]
+                ]
+            ]);
     }
 
     #[Test]
@@ -180,7 +196,6 @@ class OrderControllerTest extends TestCase
         $client = Client::factory()->create();
         $user = User::factory()->create(['client_id' => $client->id]);
 
-        // Create orders
         $order = Order::factory()->create([
             'client_id' => $client->id,
             'user_id'   => $user->id,
@@ -190,7 +205,6 @@ class OrderControllerTest extends TestCase
             'order_id' => $order->id
         ]);
 
-        // Login: create token
         $token = $user->createToken('user-token', ['client.full_access'])->plainTextToken;
 
         $response = $this->json('GET', "/api/clients/{$client->id}/orders", [], [

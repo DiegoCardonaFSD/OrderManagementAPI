@@ -62,6 +62,8 @@ return [
         'found'        => 'Orden recuperada correctamente.',
         'not_found'    => 'Orden no encontrada.',
         'listed' => 'Órdenes listadas correctamente.',
+        'customer_name_required'   => 'El nombre del cliente es obligatorio.',
+        'customer_email_invalid'   => 'El correo electrónico del cliente no es válido.',
     ],
 
 
