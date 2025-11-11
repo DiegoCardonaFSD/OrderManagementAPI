@@ -2,17 +2,14 @@
 
 namespace App\Jobs;
 
-use App\Models\Invoice;
 use App\Models\Order;
+use App\Services\Client\InvoiceService;
+use App\Services\Email\EmailService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\InvoiceMail;
-
-
 
 class GenerateInvoiceJob implements ShouldQueue
 {
@@ -25,22 +22,14 @@ class GenerateInvoiceJob implements ShouldQueue
         $this->order = $order;
     }
 
-    public function handle(): void
+    public function handle(InvoiceService $invoiceService, EmailService $emailService): void
     {
+        // 1. Generar Invoice
+        $invoice = $invoiceService->generate($this->order);
 
-        sleep(1);
+        // 2. Enviar Email
+        $emailService->sendInvoiceEmail($this->order, $invoice);
 
-        $invoice = Invoice::create([
-            'order_id' => $this->order->id,
-            'status'   => 'completed',
-            'message'  => "Invoice created for order #{$this->order->id}"
-        ]);
-
-        $emailTo = $this->order->customer_email ?: 'no-reply@example.com';
-
-        Mail::to($emailTo)->send(new InvoiceMail($this->order, $invoice));
-
-        \Log::info("Invoice created for order {$this->order->id}");
-
+        \Log::info("Invoice created & email sent for order {$this->order->id}");
     }
 }

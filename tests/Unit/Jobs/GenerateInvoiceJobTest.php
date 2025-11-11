@@ -31,8 +31,11 @@ class GenerateInvoiceJobTest extends TestCase
             'customer_email' => 'john@example.com',
         ]);
 
+        $invoiceService = app(\App\Services\Client\InvoiceService::class);
+        $emailService = app(\App\Services\Email\EmailService::class);
+
         $job = new GenerateInvoiceJob($order);
-        $job->handle();
+        $job->handle($invoiceService, $emailService);
 
         $this->assertDatabaseHas('invoices', [
             'order_id' => $order->id,

@@ -8,6 +8,10 @@ use App\Models\Invoice;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use Illuminate\Support\Facades\Queue;
+use App\Jobs\GenerateInvoiceJob;
+use App\Services\Client\InvoiceService;
+use App\Services\Email\EmailService;
 
 class InvoiceGenerationTest extends TestCase
 {
@@ -30,6 +34,8 @@ class InvoiceGenerationTest extends TestCase
     #[Test]
     public function it_creates_invoice_after_order_creation()
     {
+        Queue::fake(); 
+
         $client = Client::factory()->create();
         $user   = User::factory()->create(['client_id' => $client->id]);
 
@@ -37,11 +43,7 @@ class InvoiceGenerationTest extends TestCase
 
         $payload = array_merge($this->customerPayload(), [
             'items' => [
-                [
-                    'name'     => 'Test Item',
-                    'quantity' => 1,
-                    'price'    => 50,
-                ]
+                ['name' => 'Test Item', 'quantity' => 1, 'price' => 50]
             ]
         ]);
 
@@ -53,10 +55,20 @@ class InvoiceGenerationTest extends TestCase
         $response->assertStatus(201);
 
         $orderId = $response->json('data.id');
+        $order = \App\Models\Order::find($orderId);
+
+        Queue::assertPushed(GenerateInvoiceJob::class);
+
+        $job = new GenerateInvoiceJob($order);
+        $job->handle(
+            app(InvoiceService::class),
+            app(EmailService::class)
+        );
 
         $this->assertDatabaseHas('invoices', [
             'order_id' => $orderId,
             'status'   => 'completed'
         ]);
     }
+
 }
