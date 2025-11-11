@@ -7,13 +7,6 @@ use Illuminate\Http\Request;
 
 class CheckScopes
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  mixed ...$scopes
-     */
     public function handle(Request $request, Closure $next, ...$scopes)
     {
         $user = $request->user();

@@ -19,7 +19,6 @@ class AdminAuthServiceTest extends TestCase
     {
         parent::setUp();
 
-        // Se usa el repositorio real que interactúa con la DB en memoria
         $this->service = app(AdminAuthService::class);
     }
 
